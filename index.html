@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do-Application</title>
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background:
+            linear-gradient(rgba(0, 0, 0, 0.74),
+                rgba(0, 0, 0, 0.83)), url("bgi2.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: #FFF6E0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    nav {
+        width: 100%;
+        padding: 18px 40px;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav h2 {
+        font-size: 30px;
+        letter-spacing: 1px;
+    }
+
+    nav div {
+        list-style: none;
+        display: flex;
+        gap: 25px;
+    }
+
+    nav div button {
+        font-size: larger;
+        font-weight: bold;
+        border: none;
+        height: auto;
+        width: auto;
+        padding: 9px 7px 9px 7px;
+        border-radius: 7px;
+        background-color: #F5A524;
+    }
+
+    nav div button:hover {
+        background-color: #FFB703;
+    }
+
+    .wbtn {
+        text-decoration: none;
+        color: #1A1A1A;
+        font-size: large;
+        font-weight: bold;
+    }
+
+    main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+    }
+
+    .main {
+        width: 100%;
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .info {
+        padding: 30px;
+    }
+
+    .info h1 {
+        font-size: 38px;
+        margin-bottom: 20px;
+    }
+
+    .info p {
+        font-size: 16px;
+        line-height: 1.7;
+        opacity: 0.85;
+    }
+
+    .todo-app {
+        background: rgba(17, 17, 15, 0.8);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        align-items: center;
+    }
+
+    .todo-app:hover {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+    }
+
+    .todo-app h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .input-section {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .input-section input {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
+
+    .input-section button {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 8px;
+        background: #F5A524;
+        color: #1A1A1A;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .input-section button:hover {
+        background: #FFB703;
+    }
+
+    ul {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    li {
+        background: rgba(20, 20, 18, 0.95);
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    li.completed span {
+        text-decoration: line-through;
+        opacity: 0.6;
+    }
+
+    .task-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .task-left input {
+        cursor: pointer;
+    }
+
+    .task-left span {
+        margin-bottom: 5px;
+    }
+
+    #prioritySelect {
+        padding-left: 5px;
+        font-weight: bold;
+        color: rgba(26, 26, 26, 0.65);
+        border-radius: 8px;
+    }
+
+    .priority-colour {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+    }
+
+    .priority-colour.low {
+        background-color: lightgreen;
+    }
+
+    .priority-colour.medium {
+        background-color: yellow;
+    }
+
+    .priority-colour.high {
+        background-color: red;
+    }
+
+    .task-actions button {
+        background: none;
+        font-weight: 400;
+        border: none;
+        padding: 2px;
+        color: #F5A524;
+        cursor: pointer;
+        margin-left: 8px;
+    }
+
+    .task-actions button:hover {
+        color: #FFB703;
+    }
+
+    .changes {
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .changes button {
+        padding: 12px 18px;
+        border: none;
+        border-radius: 8px;
+        background: #F5A524;
+        color: #1A1A1A;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .changes button:hover {
+        background-color: #FFB703;
+    }
+
+    footer {
+        text-align: center;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.4);
+        font-size: 13px;
+        opacity: 0.8;
+    }
+
+    @media (max-width: 1020px) {
+        nav {
+            padding: 16px 20px;
+        }
+        nav h2 {
+            font-size: 26px;
+        }
+        .main {
+            max-width: 750px;
+            gap: 30px;
+        }
+    }
+
+    @media (max-width: 670px) {
+        nav {
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
+        nav div {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        main {
+            padding: 20px 10px;
+        }
+        .main {
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        .info {
+            padding: 10px;
+            text-align: center;
+        }
+        .info h1 {
+            font-size: 26px;
+        }
+        .todo-app {
+            padding: 20px;
+        }
+        .input-section {
+            flex-direction: column;
+        }
+        .input-section input,
+        .input-section select,
+        .input-section button {
+            width: 100%;
+        }
+        li {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .task-actions {
+            align-self: flex-end;
+        }
+        .changes {
+            flex-direction: column;
+            gap: 12px;
+        }
+        .changes button {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        nav h2 {
+            font-size: 22px;
+        }
+        .info h1 {
+            font-size: 22px;
+        }
+        .info p {
+            font-size: 14px;
+        }
+        .todo-app h1 {
+            font-size: 20px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <nav>
+        <h2>TaskFlow</h2>
+        <div>
+            <button><a href="index.html" class="wbtn">Home</a></button>
+            <button><a href="weather.html" target="_blank" class="wbtn">Weather</a></button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="main">
+            <div class="info">
+                <h1>Organize Your Day</h1>
+                <p>
+                    TaskFlow helps you create, manage, update, and track your daily tasks
+                    efficiently. Stay focused, boost productivity, and never miss what
+                    matters the most.
+                </p>
+            </div>
+            <div class="todo-app">
+                <h1>📝 To-Do List</h1>
+                <div class="input-section">
+                    <input type="text" id="taskInput" placeholder="Add a new task...">
+                    <select id="prioritySelect">
+                        <option value="" disabled selected hidden>Priority</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <button id="addbtn">Add</button>
+                </div>
+                <ul id="taskList"></ul>
+                <div class="changes">
+                    <button id="reset">RESET</button>
+                    <button id="sort">SORT</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 TaskFlow
+    </footer>
+
+    <script>
+        const taskInput = document.getElementById("taskInput");
+        const prioritySelect = document.getElementById("prioritySelect");
+        const addbtn = document.getElementById("addbtn");
+        const taskList = document.getElementById("taskList");
+        const reset = document.getElementById("reset");
+        const sort = document.getElementById("sort");
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            const priority = prioritySelect.value;
+            if (text === "")
+                return;
+            const obj = {
+                text: text,
+                completed: false,
+                priority: priority
+            }
+            tasks.push(obj);
+            taskInput.value = "";
+            saveTasks();
+            updateTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            updateTasks();
+        }
+
+        function editTask(index) {
+            const newText = prompt("Edit task:", tasks[index].text);
+            const prior = prompt("Edit priority:", tasks[index].priority);
+            if (newText && newText.trim() !== "") {
+                tasks[index].text = newText.trim();
+                tasks[index].priority = prior;
+                saveTasks();
+                updateTasks();
+            }
+        }
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function updateTasks() {
+            taskList.innerHTML = "";
+            tasks.forEach((task, index) => {
+                const li = document.createElement("li");
+                li.className = task.completed ? "completed" : "";
+
+                const left = document.createElement("div");
+                left.className = "task-left";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = task.completed;
+
+                checkbox.addEventListener("change", () => {
+                    task.completed = checkbox.checked;
+                    saveTasks();
+                    updateTasks();
+                });
+
+
+                const span = document.createElement("span");
+                span.textContent = task.text;
+
+                const box = document.createElement("div");
+                box.className = `priority-colour ${task.priority}`;
+
+                left.appendChild(checkbox);
+                left.appendChild(span);
+                left.appendChild(box);
+
+                const actions = document.createElement("div");
+                actions.className = "task-actions";
+
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+                editBtn.addEventListener("click", (e) => {
+                    editTask(index);
+                })
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.addEventListener("click", (e) => {
+                    deleteTask(index);
+                })
+
+                actions.appendChild(editBtn);
+                actions.appendChild(deleteBtn);
+
+                li.appendChild(left);
+                li.appendChild(actions);
+                taskList.appendChild(li);
+            });
+        }
+
+
+        addbtn.addEventListener("click", (e) => {
+            addTask();
+        });
+        taskInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+        reset.addEventListener("click", (e) => {
+            let done = [];
+            for (let i = 0; i < tasks.length; i++) {
+                if (tasks[i].completed === false) {
+                    done.push(tasks[i]);
+                }
+            }
+            tasks = done;
+
+            saveTasks();
+            updateTasks();
+        });
+        sort.addEventListener("click", (e) => {
+            let done = [];
+            let high = [];
+            let medium = [];
+            let low = [];
+            for (const task of tasks) {
+                if (task.completed == true)
+                    done.push(task);
+                else {
+                    if (task.priority === "high")
+                        high.push(task);
+                    else if (task.priority === "medium")
+                        medium.push(task);
+                    else
+                        low.push(task);
+                }
+            }
+            tasks = [...high, ...medium, ...low, ...done];
+
+            saveTasks();
+            updateTasks();
+        });
+        updateTasks();
+    </script>
+
+</body>
+
+</html>

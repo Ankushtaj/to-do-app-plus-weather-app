@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <button id="navigation"><a href="index.html" class="btnn">Back</a></button>
+        <h1>🌦️ Weather App</h1>
+    </nav>
+
+    <main class="container">
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Enter city name">
+            <button id="getWeatherButton">Search</button>
+        </div>
+        <div id="findWeather">
+            <h2 id="cityName"></h2>
+            <img id="weatherIcon" alt="">
+            <p id="temperature"></p>
+            <p id="condition"></p>
+            <p id="humidity"></p>
+            <p id="wind"></p>
+        </div>
+        <h4>Weather Near Me</h4>
+        <div id="weathers">
+            <div class="weatherCard">
+                <h2 id="cityName"></h2>
+                <img id="weatherIcon" alt="">
+                <p id="temperature"></p>
+                <p id="condition"></p>
+                <p id="humidity"></p>
+                <p id="wind"></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 OpenWeather ® All rights reserved</p>
+    </footer>
+
+    <script>
+        const API_KEY = "d551c0bd8e0cce9343c7a635857a52d5";
+
+        function getRandomCities(arr, count) {
+            return [...arr].sort(() => Math.random() - 0.5).slice(0, count);
+        }
+
+        async function printWeather() {
+            const arr=["Kolkata","Nabadwip", "Naihati", "Krishnanagar", "Medinipur", "Dhanbad", "Asansol", "Howrah", "Raniganj", "Bardhaman", "Andal", "Bankura", "Shantiniketan", "Tarapith"];
+            const cities = getRandomCities(arr,4);
+            for (const citi of cities) {
+                try {
+                    const loopurl = `https://api.openweathermap.org/data/2.5/weather?q=${citi}&appid=${API_KEY}&units=metric`;
+                    const response = await fetch(loopurl);
+                    if (!response.ok) {
+                        continue;
+                    }
+                    const data = await response.json();
+
+                    const cityw = document.createElement("div");
+                    cityw.className = "weatherCard";
+                    cityw.style.display = "block";
+
+                    const cn = document.createElement("h2");
+                    cn.innerText = data.name;
+
+                    const img = document.createElement("img");
+                    const iconCode = data.weather[0].icon;
+                    img.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+                    const t = document.createElement("p");
+                    t.innerText = `🌡️ Temperature: ${data.main.temp} °C`;
+
+                    const c = document.createElement("p");
+                    c.innerText = `☁️ Condition: ${data.weather[0].description}`;
+
+                    const h = document.createElement("p");
+                    h.innerText = `💧 Humidity: ${data.main.humidity}%`;
+
+                    const w = document.createElement("p");
+                    w.innerText = `🌬️ Wind Speed: ${data.wind.speed} m/s`;
+
+                    cityw.append(cn, img, t, c, h, w);
+                    document.getElementById("weathers").appendChild(cityw);
+                }
+                catch (error) {
+                    console.error("Error fetching", citi, error);
+                }
+            }
+        }
+
+        async function getWeather() {
+            const city = document.getElementById("cityInput").value;
+
+            if (city === "") {
+                alert("Please enter a city name");
+                return;
+            }
+
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+            try {
+                const response = await fetch(url);
+                if (response.ok === false) {
+                    throw new Error("City not found");
+                }
+                const data = await response.json();
+
+                document.getElementById("findWeather").style.display = "block";
+
+                document.getElementById("cityName").innerText = data.name;
+                const iconCode = data.weather[0].icon;
+                document.getElementById("weatherIcon").src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+                document.getElementById("temperature").innerText = `🌡️ Temperature: ${data.main.temp} °C`;
+                document.getElementById("condition").innerText = `☁️ Condition: ${data.weather[0].description}`;
+                document.getElementById("humidity").innerText = `💧 Humidity: ${data.main.humidity}%`;
+                document.getElementById("wind").innerText = `🌬️ Wind Speed: ${data.wind.speed} m/s`;
+            }
+            catch (error) {
+                alert(error.message);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", (e) => {
+            printWeather();
+        });
+        const but = document.getElementById("getWeatherButton");
+        but.addEventListener("click", (e) => {
+            getWeather();
+        }); 
+    </script>
+</body>
+
+</html>
